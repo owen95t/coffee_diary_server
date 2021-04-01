@@ -6,7 +6,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet')
 const morgan = require('morgan')
-const connectDB = require('./db.js')
+const connectDB = require('./config/db.js')
 
 //DB Connection
 connectDB();
