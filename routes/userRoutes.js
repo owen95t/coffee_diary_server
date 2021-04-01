@@ -17,10 +17,20 @@ router
 router
     .route('/register')
     .post(userController.createNewUser)
+    // .post(async (req, res) => {
+    //     //res.status(201).json({message: "Success"})
+    //     res.status(401).json({message: "Error"})
+    // })
 
 router
     .route('/login')
-    .post(auth, userController.userLogin)
+    .post(userController.userLogin)
+
+router
+    .route('/details')
+    .get(auth, (req, res) => {
+        res.status(200).json({message: 'Test Request Success!'})
+    })
 
 
 module.exports = router

@@ -30,6 +30,9 @@ const CoffeeSchema = new Schema({
         type: String,
         required: true
     },
+    equipment: {
+      type: String
+    },
     remarks: {
         type: String
     },
@@ -41,3 +44,5 @@ const CoffeeSchema = new Schema({
         default: Date.now()
     }
 })
+
+module.exports = mongoose.model("CoffeeSchema", CoffeeSchema)
