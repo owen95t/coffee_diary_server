@@ -45,4 +45,6 @@ const CoffeeSchema = new Schema({
     }
 })
 
+CoffeeSchema.index({'$**': 'text'})
+
 module.exports = mongoose.model("CoffeeSchema", CoffeeSchema)

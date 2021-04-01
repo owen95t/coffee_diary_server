@@ -1,6 +1,6 @@
 //TODO: Setup Mongoose DB online
 const mongoose = require('mongoose');
-const uri = "mongodb+srv://owen-admin:2391559Pongwut@cluster0.8fous.mongodb.net/coffee_diary_db?retryWrites=true&w=majority"
+const uri = "mongodb+srv://owen-admin:Ppanasupon1957@cluster0.8fous.mongodb.net/coffee_diary_db?retryWrites=true&w=majority"
 
 const connectDB = async () => {
     try{
