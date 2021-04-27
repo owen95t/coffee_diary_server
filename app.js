@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet')
 const morgan = require('morgan')
 const connectDB = require('./config/db.js')
-
+const session = require('express-session')
 //DB Connection
 connectDB();
 
