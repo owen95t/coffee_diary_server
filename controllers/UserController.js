@@ -49,11 +49,15 @@ exports.userLogin = async (req, res) => {
             return res.status(400).json({message: 'Incorrect password!'})
         }
     })
+    //Removing JWT AUTH
+    // const token = jwt.sign(
+    //     {_id: user._id},
+    //     secret.secret,
+    //     {expiresIn: 60 * 60})
 
-    const token = jwt.sign(
-        {_id: user._id},
-        secret.secret,
-        {expiresIn: 60 * 60})
-
-    res.status(200).cookie('auth-token', token, {httpOnly: true}).json({message: 'Login Success'})
+    //Adding Sessions Auth
+    req.session.isAuth = true;
+    req.session.user = user;
+    //res.status(200).cookie('auth-token', token, {httpOnly: true}).json({message: 'Login Success'})
+    return res.status(200).json({message: 'Login Success'})
 }

@@ -8,8 +8,24 @@ const helmet = require('helmet')
 const morgan = require('morgan')
 const connectDB = require('./config/db.js')
 const session = require('express-session')
+const secret = require('./config/secret')
+const redis = require('redis')
+const MongoSession = require('connect-mongodb-session')(session)
+const authSesh = require('./auth/verifySessions')
 //DB Connection
 connectDB();
+
+//SESSION INIT
+// let RedisStore = require('connect-redis')(session)
+// let redisClient = redis.createClient()
+let store = new MongoSession({
+    uri: secret.uri,
+    collection: 'sessions'
+})
+
+store.on('error', (error) => {
+    console.log('MongoSession Error: '+error)
+})
 
 //MIDDLEWARE INIT
 app.use(bodyParser.json());
@@ -24,7 +40,29 @@ app.use(helmet());
 app.use(morgan('tiny'));
 app.set('json spaces', 2)
 
+//AUTH MIDDLEWARE
+//app.set('trust proxy', 1)
+app.use(session({
+    // store: new RedisStore({client: redisClient}),
+    store: store,
+    secret: secret.session_secret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        //maxAge: 1000 * 60 * 60 * 24 //24 hours or 1 day = 1000ms in 1sec * 60 sec in one minute * 60 minutes in one hour * 24 hours
+        maxAge: 1000 * 60 //test 1 minute
+    }
+}))
+
 //SET ROUTES
+app.get("/", (req, res) => {
+    console.log(req.session)
+    // req.session.isAuth = true
+    res.send("ROOT of ROOT")
+})
+app.get("/test", authSesh, (req, res) => {
+    res.json({message: '/test'})
+})
 app.use('/api/user', require('./routes/userRoutes'))
 app.use('/api/coffee', require('./routes/coffeeRoutes'))
 

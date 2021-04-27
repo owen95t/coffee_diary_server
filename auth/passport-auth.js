@@ -1,6 +1,10 @@
-//const passport = require('passport')
+const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy;
 const bcrpyt = require('bcryptjs')
+const User = require('../models/UserModel')
+
+const verifyCallback = (username, password, done) => {}
+const strategy = new LocalStrategy({})
 
 function init(passport){
     const authenticate = async (email, password, done) => {
