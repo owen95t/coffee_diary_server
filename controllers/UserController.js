@@ -7,6 +7,7 @@ const inputValidate = require('../auth/userValidation')
 exports.createNewUser = async (req, res) => {
     //Dont forget to also validate in frontend for good UX
     console.log(req.body.username)
+    console.log(req.body.password)
     const {error} = inputValidate.registerValidation(req.body)
     if (error) {
         return res.status(400).json({message: error.details[0].message})
@@ -27,6 +28,7 @@ exports.createNewUser = async (req, res) => {
     })
     try{
         const savedUser = await newUser.save();
+        req.session.isAuth = true;
         return res.status(201).send(savedUser);
     }catch (e) {
         return res.status(400).send(e)
@@ -60,4 +62,9 @@ exports.userLogin = async (req, res) => {
     req.session.user = user;
     //res.status(200).cookie('auth-token', token, {httpOnly: true}).json({message: 'Login Success'})
     return res.status(200).json({message: 'Login Success'})
+}
+
+exports.userLogout = (req, res) => {
+    req.session.destroy()
+    return res.status(200).json({message: 'Logout Complete'})
 }

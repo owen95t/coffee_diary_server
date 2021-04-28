@@ -7,9 +7,9 @@ const verifyCallback = (username, password, done) => {}
 const strategy = new LocalStrategy({})
 
 function init(passport){
-    const authenticate = async (email, password, done) => {
-        const user = getUserByEmail(email);
-        if (user == null) {
+    const authenticate = async (username, password, done) => {
+        const user = await User.findOne({username: username})
+        if (user == null || !user) {
             return done(null, false, { message: 'No User with that email'})
         }
         try {
@@ -24,11 +24,12 @@ function init(passport){
     }
     passport.use(new LocalStrategy({usernameField: 'email'}),
         authenticate)
+
     passport.serializeUser((user, done) => {
-        done(null, user.id)
+        done(null, user._id)
     })
     passport.deserializeUser((id, done) => {
-
+        done(null, { id })
     })
 }
 

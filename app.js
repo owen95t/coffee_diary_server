@@ -55,7 +55,7 @@ app.use(session({
 }))
 
 //SET ROUTES
-app.get("/", (req, res) => {
+app.get("/", authSesh, (req, res) => {
     console.log(req.session)
     // req.session.isAuth = true
     res.send("ROOT of ROOT")

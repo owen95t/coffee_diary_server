@@ -5,11 +5,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const userController = require('../controllers/UserController')
 const auth = require('../auth/verifyToken')
+const authSesh = require('../auth/verifySessions')
 
 
 router
     .route('/')
-    .get(auth, (req, res) => {
+    .get(authSesh, (req, res) => {
         console.log('/api/user root requested');
         res.send('/api/user root. User ID: ' + req.user._id)
     });
@@ -27,8 +28,12 @@ router
     .post(userController.userLogin)
 
 router
+    .route('/logout')
+    .get(userController.userLogout)
+
+router
     .route('/details')
-    .get(auth, (req, res) => {
+    .get(authSesh, (req, res) => {
         res.status(200).json({message: 'Test Request Success!'})
     })
 
