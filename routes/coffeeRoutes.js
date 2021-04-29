@@ -11,15 +11,15 @@ router
 
 router
     .route('/new')
-    .post(auth, EntryController.newEntry)
+    .post(authSesh, EntryController.newEntry)
 
 router
     .route('/all')
-    .get(auth, EntryController.getAll)
+    .get(authSesh, EntryController.getAll)
 
 router
     .route('/searchall')
-    .get(auth, EntryController.searchAll)
+    .get(authSesh, EntryController.searchAll)
 
 module.exports = router
 

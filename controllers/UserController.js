@@ -59,7 +59,7 @@ exports.userLogin = async (req, res) => {
 
     //Adding Sessions Auth
     req.session.isAuth = true;
-    req.session.user = user;
+    req.session.uid = user._id;
     //res.status(200).cookie('auth-token', token, {httpOnly: true}).json({message: 'Login Success'})
     return res.status(200).json({message: 'Login Success'})
 }

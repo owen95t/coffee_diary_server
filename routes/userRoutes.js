@@ -34,6 +34,7 @@ router
 router
     .route('/details')
     .get(authSesh, (req, res) => {
+        console.log(req.session.uid)
         res.status(200).json({message: 'Test Request Success!'})
     })
 
