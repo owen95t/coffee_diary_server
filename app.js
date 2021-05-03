@@ -50,7 +50,7 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         //maxAge: 1000 * 60 * 60 * 24 //24 hours or 1 day = 1000ms in 1sec * 60 sec in one minute * 60 minutes in one hour * 24 hours
-        maxAge: 1000 * 60 //test 1 minute
+        maxAge: 1000 * 60 * 5 //test 5 minute
     }
 }))
 

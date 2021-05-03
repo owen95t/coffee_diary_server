@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+//Todo: refractor to EntrySchema
+
 const CoffeeSchema = new Schema({
     brand: {
         type: String,
@@ -42,6 +44,10 @@ const CoffeeSchema = new Schema({
     date: {
         type: Date,
         default: Date.now()
+    },
+    user_id: {
+        type: String,
+        required: true
     }
 })
 
