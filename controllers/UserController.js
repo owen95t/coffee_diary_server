@@ -19,13 +19,20 @@ exports.createNewUser = async (req, res) => {
     if (user) {
         return res.status(400).json({message: 'User already exists!'})
     }
-
-    const hashedPass = await bcrypt.hash(req.body.password, 10);
-    //catch bcrypt errors
+    let hashedPass;
+    try {
+        hashedPass = await bcrypt.hash(req.body.password, 10);
+        if (!hashedPass) {
+            return res.status(400).json({message: 'Bcrypt Error'})
+        }
+    }catch (e) {
+        console.log('Hash Error: ' + e)
+        return res.status(400).json({message: 'Bcrypt Error'})
+    }
     const newUser = new User({
         username: req.body.username,
         password: hashedPass
-    })
+    });
     try{
         const savedUser = await newUser.save();
         req.session.isAuth = true;
@@ -36,21 +43,26 @@ exports.createNewUser = async (req, res) => {
 }
 
 exports.userLogin = async (req, res) => {
-    console.log(req.body.password)
-    const user = await User.findOne({username: req.body.username})
+    const user = await User.findOne({username: req.body.username}).catch(e => {
+        if (e) {
+            console.log('User Login Find One Error')
+            return res.status(500).json({message: 'Mongoose Error'})
+        }
+    })
     if (!user) {
         return res.status(400).json({message: 'User does not exist!'})
     }
+    try{
+        let result = await bcrypt.compare(req.body.password, user.password)
+        if (!result) {
+            console.log('Password doesnt match')
+            return res.status(400).json({message:'Password Doesnt Match'})
+        }
+    }catch (e) {
+        console.log(e);
+        return res.status(400).json({message: 'Bcrypt error'})
+    }
 
-    await bcrypt.compare(req.body.password, user.password, (err, result) => {
-        if (err) { //if error
-            console.log('err')
-            return res.status(500).json({message: 'Server Error (BCRYPT)'})
-        }
-        if (!result) { //if compare = false
-            return res.status(400).json({message: 'Incorrect password!'})
-        }
-    })
     //Removing JWT AUTH
     // const token = jwt.sign(
     //     {_id: user._id},
@@ -65,6 +77,10 @@ exports.userLogin = async (req, res) => {
 }
 
 exports.userLogout = (req, res) => {
+    // setTimeout((() => {
+    //     req.session.destroy()
+    //     return res.status(200).json({message: 'Logout Complete'})
+    // }), 2000)
     req.session.destroy()
     return res.status(200).json({message: 'Logout Complete'})
 }

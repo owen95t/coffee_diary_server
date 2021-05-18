@@ -5,11 +5,9 @@ exports.index = async (req, res) => {
 }
 
 exports.newEntry = async (req, res) => {
-
     const user_id = req.session.uid
     req.body.user_id = user_id
     console.log(req.body)
-
     const newEntry = new Entry(req.body)
 
     try{
@@ -22,12 +20,7 @@ exports.newEntry = async (req, res) => {
 }
 
 exports.getAll = async (req, res) => {
-    //TODO add request.session.uid
-    //to grab User ID to make sure that the find operation is searching in the collection that pertains to
-    //the correct user. if no user, 401 access denied via Session Middleware
     const user_id = req.session.uid
-
-
     const results = await Entry.find({user_id: user_id}).catch(e => {
         if (e) {
             console.log(e);
@@ -43,9 +36,6 @@ exports.getAll = async (req, res) => {
 }
 
 exports.searchAll = async (req, res) => {
-    //TODO add request.session.uid
-    //to grab User ID to make sure that the find operation is searching in the collection that pertains to
-    //the correct user. if no user, 401 access denied via Session Middleware
     const user_id = req.session.uid
     const results = await Entry.find({$text: {$search: req.body}, user_id: user_id}).catch(e => {
         if (e) {
