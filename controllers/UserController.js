@@ -33,25 +33,35 @@ exports.createNewUser = async (req, res) => {
         username: req.body.username,
         password: hashedPass
     });
+    let savedUser;
     try{
-        const savedUser = await newUser.save();
-        req.session.isAuth = true;
-        return res.status(201).send(savedUser);
+        savedUser = await newUser.save();
+        //Express session:
+        //req.session.isAuth = true;
+        //return res.status(201).send(savedUser);
     }catch (e) {
         return res.status(400).send(e)
     }
+    if(!savedUser){
+        return res.status(500).json({message: 'saved error'})
+    }
+
+    return res.status(201).json({message: 'User Created successfully'})
 }
 
 exports.userLogin = async (req, res) => {
-    const user = await User.findOne({username: req.body.username}).catch(e => {
-        if (e) {
-            console.log('User Login Find One Error')
-            return res.status(500).json({message: 'Mongoose Error'})
+    let user
+    try{
+        user = await User.findOne({username: req.body.username})
+        if (!user) {
+            return res.status(400).json({message: 'User does not exist!'})
         }
-    })
-    if (!user) {
-        return res.status(400).json({message: 'User does not exist!'})
+    }catch (e) {
+        console.log('User Login Find One Error')
+        return res.status(500).json({message: 'Mongoose Error'})
     }
+
+
     try{
         let result = await bcrypt.compare(req.body.password, user.password)
         if (!result) {
@@ -63,17 +73,26 @@ exports.userLogin = async (req, res) => {
         return res.status(400).json({message: 'Bcrypt error'})
     }
 
-    //Removing JWT AUTH
-    // const token = jwt.sign(
-    //     {_id: user._id},
-    //     secret.secret,
-    //     {expiresIn: 60 * 60})
-
+    //JWT AUTH
+    const token = jwt.sign(
+        {_id: user._id},
+        secret.secret,
+        {expiresIn: '1d'})
+    //CSRF Token
+    let csrfToken
+    let id = user._id
+    try{
+        csrfToken = await bcrypt.hash(id.toString(), 10)
+    }catch (e) {
+        console.log('CSRFToken BCRYPT Error')
+        console.log(e)
+    }
+    console.log(csrfToken)
     //Adding Sessions Auth
-    req.session.isAuth = true;
-    req.session.uid = user._id;
-    //res.status(200).cookie('auth-token', token, {httpOnly: true}).json({message: 'Login Success'})
-    return res.status(200).json({message: 'Login Success'})
+    //req.session.isAuth = true;
+    //req.session.uid = user._id;
+    return res.status(200).set({'CSRFToken': csrfToken}).cookie('auth-token', token, {httpOnly: true}).json({message: 'Login Success'})
+    //return res.status(200).json({message: 'Login Success'})
 }
 
 exports.userLogout = (req, res) => {
@@ -81,6 +100,20 @@ exports.userLogout = (req, res) => {
     //     req.session.destroy()
     //     return res.status(200).json({message: 'Logout Complete'})
     // }), 2000)
-    req.session.destroy()
-    return res.status(200).json({message: 'Logout Complete'})
+    res.status(200).cookie('auth-token', '', {httpOnly: true}).json({message: 'Logout complete'})
+    //Express sessions
+    //req.session.destroy()
+    //return res.status(200).json({message: 'Logout Complete'})
+}
+
+exports.getUserInfo = async (req, res) => {
+    let userID = req.session.uid
+    try{
+        const user = await User.findOne({_id: userID})
+        if (user) {
+            return res.status(200).json(user)
+        }
+    }catch (e) {
+        return res.status(404).json({message: 'User not found!'})
+    }
 }

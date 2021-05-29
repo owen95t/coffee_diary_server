@@ -7,19 +7,19 @@ const EntryController = require('../controllers/EntryController')
 
 router
     .route('/') // api/coffee/
-    .get(authSesh, EntryController.index)
+    .get(auth, EntryController.index)
 
 router
     .route('/new')
-    .post(authSesh, EntryController.newEntry)
+    .post(auth, EntryController.newEntry)
 
 router
     .route('/all')
-    .get(authSesh, EntryController.getAll)
+    .get(auth, EntryController.getAll)
 
 router
     .route('/searchall')
-    .get(authSesh, EntryController.searchAll)
+    .get(auth, EntryController.searchAll)
 
 module.exports = router
 

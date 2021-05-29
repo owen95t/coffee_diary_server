@@ -5,9 +5,16 @@ exports.index = async (req, res) => {
 }
 
 exports.newEntry = async (req, res) => {
-    const user_id = req.session.uid
-    req.body.user_id = user_id
+    //Express session
+    // const user_id = req.session.uid
+    // req.body.user_id = user_id
+
     console.log(req.body)
+
+    //JWT
+    const user_id = req.info._id
+    req.body.user_id = user_id
+
     const newEntry = new Entry(req.body)
 
     try{
@@ -20,7 +27,13 @@ exports.newEntry = async (req, res) => {
 }
 
 exports.getAll = async (req, res) => {
-    const user_id = req.session.uid
+    //Express session:
+    // const user_id = req.session.uid
+    //JWT
+    //const token = req.info
+    const user_id = req.info._id
+    //console.log("token: " + token + ' id: ' + token._id)
+
     const results = await Entry.find({user_id: user_id}).catch(e => {
         if (e) {
             console.log(e);
@@ -36,7 +49,10 @@ exports.getAll = async (req, res) => {
 }
 
 exports.searchAll = async (req, res) => {
-    const user_id = req.session.uid
+    //Express
+    //const user_id = req.session.uid
+    //JWT
+    const user_id = req.info._id
     const results = await Entry.find({$text: {$search: req.body}, user_id: user_id}).catch(e => {
         if (e) {
             console.log('Search Error' + e)
