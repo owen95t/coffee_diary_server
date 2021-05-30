@@ -3,9 +3,11 @@ const bcrypt = require('bcryptjs');
 const secret = require('../config/secret')
 const jwt = require('jsonwebtoken')
 const inputValidate = require('../auth/userValidation')
+const csrf = require('csurf')
+
+
 
 exports.createNewUser = async (req, res) => {
-    //Dont forget to also validate in frontend for good UX
     console.log(req.body.username)
     console.log(req.body.password)
     const {error} = inputValidate.registerValidation(req.body)
@@ -78,28 +80,16 @@ exports.userLogin = async (req, res) => {
         {_id: user._id},
         secret.secret,
         {expiresIn: '1d'})
-    //CSRF Token
-    let csrfToken
-    let id = user._id
-    try{
-        csrfToken = await bcrypt.hash(id.toString(), 10)
-    }catch (e) {
-        console.log('CSRFToken BCRYPT Error')
-        console.log(e)
-    }
-    console.log(csrfToken)
+
     //Adding Sessions Auth
     //req.session.isAuth = true;
     //req.session.uid = user._id;
-    return res.status(200).set({'CSRFToken': csrfToken}).cookie('auth-token', token, {httpOnly: true}).json({message: 'Login Success'})
-    //return res.status(200).json({message: 'Login Success'})
+
+    //Token is same as auth-token
+    return res.status(200).set({'CSRFToken': token}).cookie('auth-token', token, {httpOnly: true}).json({message: 'Login Success'})
 }
 
 exports.userLogout = (req, res) => {
-    // setTimeout((() => {
-    //     req.session.destroy()
-    //     return res.status(200).json({message: 'Logout Complete'})
-    // }), 2000)
     res.status(200).cookie('auth-token', '', {httpOnly: true}).json({message: 'Logout complete'})
     //Express sessions
     //req.session.destroy()

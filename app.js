@@ -13,6 +13,7 @@ const redis = require('redis')
 const MongoSession = require('connect-mongodb-session')(session)
 const authSesh = require('./auth/verifySessions')
 const auth = require('./auth/verifyToken')
+const csurf = require('csurf')
 //DB Connection
 connectDB();
 
@@ -32,7 +33,7 @@ store.on('error', (error) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors({
-    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'X-Access-Token', 'Authorization', 'auth-token', 'Access-Control-Allow-Credentials', 'Access-Control-Allow-Origin'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'X-Access-Token', 'Authorization', 'auth-token', 'Access-Control-Allow-Credentials', 'Access-Control-Allow-Origin', 'CSRFToken'],
     exposedHeaders: 'CSRFToken',
     credentials: true,
     origin: ["http://localhost:8080", "http://localhost:3000"]
@@ -43,6 +44,8 @@ app.use(morgan('tiny'));
 app.set('json spaces', 2)
 
 //AUTH MIDDLEWARE
+//add secure: true for production (https only)
+
 //app.set('trust proxy', 1)
 // app.use(session({
 //     // store: new RedisStore({client: redisClient}),
@@ -55,6 +58,7 @@ app.set('json spaces', 2)
 //         maxAge: 1000 * 60 * 5 //test 5 minute
 //     }
 // }))
+
 
 app.use(function (err, req, res, next) {
     console.error(err.stack)
