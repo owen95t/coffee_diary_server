@@ -13,21 +13,29 @@ const redis = require('redis')
 const MongoSession = require('connect-mongodb-session')(session)
 const authSesh = require('./auth/verifySessions')
 const auth = require('./auth/verifyToken')
-const csurf = require('csurf')
+const limiter = require('express-rate-limit')
 //DB Connection
 connectDB();
 
 //SESSION INIT
 // let RedisStore = require('connect-redis')(session)
 // let redisClient = redis.createClient()
-let store = new MongoSession({
-    uri: secret.uri,
-    collection: 'sessions'
+// Store session in mongo
+// let store = new MongoSession({
+//     uri: secret.uri,
+//     collection: 'sessions'
+// })
+//
+// store.on('error', (error) => {
+//     console.log('MongoSession Error: '+error)
+// })
+
+//RATE LIMITER
+const rateLimiter = limiter({
+    max: 200,
+    window: 1000 * 60 * 15 // 15 minutes
 })
 
-store.on('error', (error) => {
-    console.log('MongoSession Error: '+error)
-})
 
 //MIDDLEWARE INIT
 app.use(bodyParser.json());
@@ -42,6 +50,7 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(morgan('tiny'));
 app.set('json spaces', 2)
+app.use(rateLimiter);
 
 //AUTH MIDDLEWARE
 //add secure: true for production (https only)
@@ -67,7 +76,7 @@ app.use(function (err, req, res, next) {
 
 //SET ROUTES
 app.get("/", auth, (req, res) => {
-    //console.log(req.session)
+    // console.log(req.session)
     // req.session.isAuth = true
     res.send("ROOT of ROOT")
 })
