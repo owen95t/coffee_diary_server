@@ -96,14 +96,49 @@ exports.userLogout = (req, res) => {
     //return res.status(200).json({message: 'Logout Complete'})
 }
 
-exports.getUserInfo = async (req, res) => {
-    let userID = req.session.uid
-    try{
-        const user = await User.findOne({_id: userID})
-        if (user) {
-            return res.status(200).json(user)
-        }
-    }catch (e) {
-        return res.status(404).json({message: 'User not found!'})
+// exports.getUserInfo = async (req, res) => {
+//     let userID = req.session.uid
+//     try{
+//         const user = await User.findOne({_id: userID})
+//         if (user) {
+//             return res.status(200).json(user)
+//         }
+//     }catch (e) {
+//         return res.status(404).json({message: 'User not found!'})
+//     }
+// }
+
+exports.checkValidSession = async (req, res) => {
+    const token = req.cookies['auth-token']
+
+    console.log('Token: ' + token)
+    if (!token) {
+        console.log('No Token Found')
+        return res.status(401).json({message: 'Invalid Session', valid: false})
     }
+
+
+    let decoded
+    try{
+        decoded = jwt.verify(token, secret.secret)
+    }catch (e) {
+        console.log(e)
+        console.log('JWT Error')
+        return res.status(401).json({message: 'Session Check: JWT Error'})
+    }
+    console.log('Decoded Token: ' + decoded)
+    const user = User.findOne({username: decoded._id})
+
+    if (!user) {
+        console.log('No User Found')
+        return res.status(401).json({message: 'Invalid Session', valid: false})
+    }
+
+    const csrfToken = jwt.sign(
+        {_id: user._id},
+        secret.secret,
+        {expiresIn: '1d'}
+    )
+
+    return res.status(200).set({'CSRFToken' : csrfToken}).json({message: 'Valid Session', valid: true})
 }

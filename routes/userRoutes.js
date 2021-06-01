@@ -42,8 +42,6 @@ router
 
 router
     .route('/check')
-    .get(auth, (req, res) => {
-        res.status(200).json({message: 'Check Validity OK'})
-    })
+    .get(userController.checkValidSession)
 
 module.exports = router
