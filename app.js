@@ -43,7 +43,7 @@ app.use(cors({
     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'X-Access-Token', 'Authorization', 'auth-token', 'Access-Control-Allow-Credentials', 'Access-Control-Allow-Origin', 'CSRFToken'],
     exposedHeaders: 'CSRFToken',
     credentials: true,
-    origin: ["http://localhost:8080", "http://localhost:3000"]
+    origin: ["http://localhost:8080", "http://localhost:3000", "https;//coffeediary.netlify.app"]
 }));
 app.use(cookieParser());
 app.use(helmet());
