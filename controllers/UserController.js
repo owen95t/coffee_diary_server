@@ -1,6 +1,6 @@
 const User = require('../models/UserModel');
 const bcrypt = require('bcryptjs');
-const secret = require('../config/secret')
+const secret = process.env.JWT_SECRET
 const jwt = require('jsonwebtoken')
 const inputValidate = require('../auth/userValidation')
 
@@ -77,7 +77,7 @@ exports.userLogin = async (req, res) => {
     //JWT AUTH
     const token = jwt.sign(
         {_id: user._id},
-        secret.secret,
+        secret,
         {expiresIn: '1d'})
 
     //Adding Sessions Auth
@@ -135,7 +135,7 @@ exports.checkValidSession = async (req, res) => {
 
     const csrfToken = jwt.sign(
         {_id: user._id},
-        secret.secret,
+        secret,
         {expiresIn: '1d'}
     )
 

@@ -1,11 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/UserModel');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const userController = require('../controllers/UserController')
 const auth = require('../auth/verifyToken')
-const authSesh = require('../auth/verifySessions')
 
 router
     .route('/')
