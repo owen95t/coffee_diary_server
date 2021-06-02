@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const secret = require('../config/secret')
 const jwt = require('jsonwebtoken')
 const inputValidate = require('../auth/userValidation')
-const csrf = require('csurf')
 
 
 
@@ -110,15 +109,15 @@ exports.userLogout = (req, res) => {
 
 exports.checkValidSession = async (req, res) => {
     const token = req.cookies['auth-token']
-
-    console.log('Token: ' + token)
+    //console.log('Token: ' + token)
     if (!token) {
         console.log('No Token Found')
         return res.status(401).json({message: 'Invalid Session', valid: false})
     }
 
 
-    let decoded
+
+    let decoded;
     try{
         decoded = jwt.verify(token, secret.secret)
     }catch (e) {
@@ -126,7 +125,7 @@ exports.checkValidSession = async (req, res) => {
         console.log('JWT Error')
         return res.status(401).json({message: 'Session Check: JWT Error'})
     }
-    console.log('Decoded Token: ' + decoded)
+    //console.log('Decoded Token: ' + decoded)
     const user = User.findOne({username: decoded._id})
 
     if (!user) {

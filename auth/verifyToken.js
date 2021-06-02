@@ -4,8 +4,8 @@ const secret = require('../config/secret');
 module.exports = (req, res, next) => {
     const token = req.cookies['auth-token']
     const csrf = req.get('CSRFToken')
-    console.log('CSRF: ' + csrf)
-    console.log('Cookie: ' + req.cookies['auth-token'])
+    //console.log('CSRF: ' + csrf)
+    //console.log('Cookie: ' + req.cookies['auth-token'])
     if(!token || !csrf) {
         console.log('No token. No CSRF. Access Denied' )
         return res.status(401).json({message: 'Not Authenticated. Access Denied'})
