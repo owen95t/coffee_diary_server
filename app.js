@@ -43,7 +43,7 @@ app.use(cors({
     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'X-Access-Token', 'Authorization', 'auth-token', 'Access-Control-Allow-Credentials', 'Access-Control-Allow-Origin', 'CSRFToken'],
     exposedHeaders: 'CSRFToken',
     credentials: true,
-    origin: ["http://localhost:8080", "http://localhost:3000", "https://coffeediary.netlify.app"]
+    origin: ["http://localhost:8080", "http://localhost:3000", "https://coffeediary.netlify.app"],
 }));
 app.use(cookieParser());
 app.use(helmet());
@@ -54,7 +54,7 @@ app.use(rateLimiter);
 //AUTH MIDDLEWARE
 //add secure: true for production (https only)
 
-//app.set('trust proxy', 1)
+app.set('trust proxy', 1)
 // app.use(session({
 //     // store: new RedisStore({client: redisClient}),
 //     store: store,
