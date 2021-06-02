@@ -74,10 +74,10 @@ app.use(function (err, req, res, next) {
 })
 
 //SET ROUTES
-app.get("/", auth, (req, res) => {
+app.get("/", (req, res) => {
     // console.log(req.session)
     // req.session.isAuth = true
-    res.send("ROOT of ROOT")
+    res.json({message: 'Root of Coffee Diary API'})
 })
 app.get("/test", auth, (req, res) => {
     res.json({message: '/test'})
