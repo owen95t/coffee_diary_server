@@ -1,6 +1,5 @@
 //TODO: Setup Mongoose DB online
 const mongoose = require('mongoose');
-const secret = require('./secret')
 const uri = process.env.MONGO_URI
 
 const connectDB = async () => {

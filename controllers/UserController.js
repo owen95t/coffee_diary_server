@@ -119,7 +119,7 @@ exports.checkValidSession = async (req, res) => {
 
     let decoded;
     try{
-        decoded = jwt.verify(token, secret.secret)
+        decoded = jwt.verify(token, secret)
     }catch (e) {
         console.log(e)
         console.log('JWT Error')
