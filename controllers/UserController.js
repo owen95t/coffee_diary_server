@@ -85,7 +85,7 @@ exports.userLogin = async (req, res) => {
     //req.session.uid = user._id;
 
     //Token is same as auth-token
-    return res.status(200).set({'CSRFToken': token}).cookie('auth-token', token, {httpOnly: true, secure: true, sameSite: "none"}).json({message: 'Login Success'})
+    return res.status(200).set({'CSRFToken': token}).cookie('auth-token', token, {path: '/', domain: '.netlify.app', httpOnly: true, secure: true, sameSite: "none"}).json({message: 'Login Success'})
 }
 
 exports.userLogout = (req, res) => {
