@@ -21,5 +21,13 @@ router
     .route('/searchall')
     .get(auth, EntryController.searchAll)
 
+router
+    .route('/deleteEntry')
+    .delete(auth, EntryController.deleteEntry)
+
+router
+    .route('/updateEntry')
+    .put(auth, EntryController.updateEntry)
+
 module.exports = router
 

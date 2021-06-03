@@ -66,3 +66,32 @@ exports.searchAll = async (req, res) => {
     return res.status(200).json(results)
 }
 
+exports.deleteEntry = async (req, res) => {
+    const id = req.body.id
+    const deleted = Entry.findOneAndDelete({_id: id}).catch(e => {
+        console.log('FindOneAndDelete Error: ' + e)
+        return res.status(500).json({message: 'Delete Error'})
+    })
+
+    if (!deleted) {
+        return res.status(404).json({message: 'Cannot find item to delete'})
+    }
+
+    return res.status(200).json({message: 'Delete Success'})
+}
+
+exports.updateEntry = async (req, res) => {
+    const body = req.body.item
+    const id = req.body.id
+
+    const updated = Entry.findOneAndUpdate({_id: id}, body).catch(e => {
+        console.log('FindOneAndUpdate Error: ' + e)
+        return res.status(500).json({message: 'Update Error'})
+    })
+
+    if (!updated) {
+        return res.status(404).json({message: 'Cannot find item to update'})
+    }
+
+    return res.status(200).json({message: 'Update Success'})
+}
