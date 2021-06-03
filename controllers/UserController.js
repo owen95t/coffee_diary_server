@@ -1,6 +1,6 @@
 const User = require('../models/UserModel');
 const bcrypt = require('bcryptjs');
-const secret = process.env.JWT_SECRET
+const secret = process.env.JWT_SECRET || require('../config/secret').secret
 const jwt = require('jsonwebtoken')
 const inputValidate = require('../auth/userValidation')
 
@@ -84,7 +84,9 @@ exports.userLogin = async (req, res) => {
     //req.session.uid = user._id;
 
     //Token is same as auth-token
+    // TODO: CHANGE FOR LOCAL DEV
     return res.status(200).set({'CSRFToken': token}).cookie('auth-token', token, {path: '/', domain: '.coffeediary.app', httpOnly: true, secure: true, sameSite: "none"}).json({message: 'Login Success'})
+    //return res.status(200).set({'CSRFToken': token}).cookie('auth-token', token, {path: '/', httpOnly: true, secure: true, sameSite: "none"}).json({message: 'Login Success'})
 }
 
 exports.userLogout = (req, res) => {

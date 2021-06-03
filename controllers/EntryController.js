@@ -68,6 +68,7 @@ exports.searchAll = async (req, res) => {
 
 exports.deleteEntry = async (req, res) => {
     const id = req.body.id
+    console.log('delete id: ' + id)
     const deleted = Entry.findOneAndDelete({_id: id}).catch(e => {
         console.log('FindOneAndDelete Error: ' + e)
         return res.status(500).json({message: 'Delete Error'})
