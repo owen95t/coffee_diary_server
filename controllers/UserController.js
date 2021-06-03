@@ -84,7 +84,7 @@ exports.userLogin = async (req, res) => {
     //req.session.uid = user._id;
 
     //Token is same as auth-token
-    // TODO: CHANGE FOR LOCAL DEV
+    // CHANGE FOR LOCAL DEV: LOCAL DEV NO DOMAIN
     return res.status(200).set({'CSRFToken': token}).cookie('auth-token', token, {path: '/', domain: '.coffeediary.app', httpOnly: true, secure: true, sameSite: "none"}).json({message: 'Login Success'})
     //return res.status(200).set({'CSRFToken': token}).cookie('auth-token', token, {path: '/', httpOnly: true, secure: true, sameSite: "none"}).json({message: 'Login Success'})
 }
