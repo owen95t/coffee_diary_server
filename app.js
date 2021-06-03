@@ -54,7 +54,7 @@ app.use(rateLimiter);
 //AUTH MIDDLEWARE
 //add secure: true for production (https only)
 
-app.set('trust proxy', 1)
+// app.set('trust proxy', 1)
 // app.use(session({
 //     // store: new RedisStore({client: redisClient}),
 //     store: store,

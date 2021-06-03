@@ -85,11 +85,11 @@ exports.userLogin = async (req, res) => {
     //req.session.uid = user._id;
 
     //Token is same as auth-token
-    return res.status(200).set({'CSRFToken': token}).cookie('auth-token', token, {path: '/', domain: '.netlify.app', httpOnly: true, secure: true, sameSite: "none"}).json({message: 'Login Success'})
+    return res.status(200).set({'CSRFToken': token}).cookie('auth-token', token, {path: '/', domain: '.coffeediary.app', httpOnly: true, secure: true, sameSite: "none"}).json({message: 'Login Success'})
 }
 
 exports.userLogout = (req, res) => {
-    res.status(200).cookie('auth-token', '', {path: '/', domain: '.netlify.app', httpOnly: true, secure: true, sameSite: "none"}).json({message: 'Logout complete'})
+    res.status(200).cookie('auth-token', '', {path: '/', domain: '.coffeediary.app', httpOnly: true, secure: true, sameSite: "none"}).json({message: 'Logout complete'})
     //Express sessions
     //req.session.destroy()
     //return res.status(200).json({message: 'Logout Complete'})
