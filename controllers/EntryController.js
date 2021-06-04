@@ -12,8 +12,7 @@ exports.newEntry = async (req, res) => {
     console.log(req.body)
 
     //JWT
-    const user_id = req.info._id
-    req.body.user_id = user_id
+    req.body.user_id = req.info._id
 
     const newEntry = new Entry(req.body)
 
@@ -84,6 +83,8 @@ exports.deleteEntry = async (req, res) => {
 exports.updateEntry = async (req, res) => {
     const body = req.body.item
     const id = req.body.id
+    console.log('To Update: ' + body)
+    console.log('ID to update: ' + id)
 
     const updated = Entry.findOneAndUpdate({_id: id}, body).catch(e => {
         console.log('FindOneAndUpdate Error: ' + e)

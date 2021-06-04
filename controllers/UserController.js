@@ -90,8 +90,8 @@ exports.userLogin = async (req, res) => {
 }
 
 exports.userLogout = (req, res) => {
-    //res.status(200).cookie('auth-token', '', {path: '/', domain: '.coffeediary.app', httpOnly: true, secure: true, sameSite: "none"}).json({message: 'Logout complete'})
     res.status(200).clearCookie('auth-token', {path: '/', domain: '.coffeediary.app', httpOnly: true, secure: true, sameSite: "none"}).json({message: 'Logout complete'})
+    //res.status(200).clearCookie('auth-token', {path: '/', httpOnly: true, secure: true, sameSite: "none"}).json({message: 'Logout complete'})
     //Express sessions
     //req.session.destroy()
     //return res.status(200).json({message: 'Logout Complete'})
