@@ -10,7 +10,7 @@ exports.createNewUser = async (req, res) => {
     console.log(req.body.password)
     const {error} = inputValidate.registerValidation(req.body)
     if (error) {
-        return res.status(400).json({message: error.details[0].message})
+        return res.status(400).json({message: 'Input Validation Error', errorMessage: error.details[0].message})
     }
 
     const user = await User.findOne({username: req.body.username}).catch(e => {
@@ -50,6 +50,11 @@ exports.createNewUser = async (req, res) => {
 }
 
 exports.userLogin = async (req, res) => {
+    const {error} = inputValidate.loginValidation(req.body)
+    if (error) {
+        return res.status(400).json({message: 'Input Validation Error', errorMessage: error.details[0].message})
+    }
+
     let user
     try{
         user = await User.findOne({username: req.body.username})
