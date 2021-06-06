@@ -4,19 +4,19 @@ exports.entryValidation = (data) => {
     const schema = joi.object({
         brand: joi.string()
             .required()
-            .max(15),
+            .max(30),
         beans: joi.string()
             .required()
-            .max(15),
+            .max(30),
         roast: joi.string()
             .required()
-            .max(15),
+            .max(30),
         weight: joi.number()
             .required()
             .max(1000),
         grind_size: joi.number()
             .required()
-            .max(100),
+            .max(1000),
         yield: joi.number()
             .required()
             .max(1000),
@@ -41,19 +41,19 @@ exports.updateValidation = (data) => {
     const schema = joi.object({
         brand: joi.string()
             .required()
-            .max(15),
+            .max(30),
         beans: joi.string()
             .required()
-            .max(15),
+            .max(30),
         roast: joi.string()
             .required()
-            .max(15),
+            .max(30),
         weight: joi.number()
             .required()
             .max(1000),
         grind_size: joi.number()
             .required()
-            .max(100),
+            .max(1000),
         yield: joi.number()
             .required()
             .max(1000),
