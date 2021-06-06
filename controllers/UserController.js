@@ -6,8 +6,8 @@ const inputValidate = require('../auth/userValidation')
 
 
 exports.createNewUser = async (req, res) => {
-    console.log(req.body.username)
-    console.log(req.body.password)
+    //console.log(req.body.username)
+    //console.log(req.body.password)
     const {error} = inputValidate.registerValidation(req.body)
     if (error) {
         return res.status(400).json({message: 'Input Validation Error', errorMessage: error.details[0].message})
@@ -15,6 +15,7 @@ exports.createNewUser = async (req, res) => {
 
     const user = await User.findOne({username: req.body.username}).catch(e => {
         console.log('USER FIND ONE ERROR ' + e)
+        return res.status(500).json({message: 'Mongoose error!'})
     })
     if (user) {
         return res.status(400).json({message: 'User already exists!'})

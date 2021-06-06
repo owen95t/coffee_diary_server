@@ -1,4 +1,5 @@
 const Entry = require('../models/CoffeeModel')
+const inputValidate = require('../auth/entryValidation')
 
 exports.index = async (req, res) => {
     return res.status(200).json({message: 'You are at the root of the API. You require authentication to go forwards.'})
@@ -9,10 +10,18 @@ exports.newEntry = async (req, res) => {
     // const user_id = req.session.uid
     // req.body.user_id = user_id
 
-    console.log(req.body)
+
+    console.log(req.body);
 
     //JWT
     req.body.user_id = req.info._id
+    req.body.date = Date.now()
+
+    const {error} = inputValidate.entryValidation(req.body)
+    if (error) {
+        console.log(error)
+        return res.status(400).json({message: 'New Entry Validation Error!'})
+    }
 
     const newEntry = new Entry(req.body)
 
@@ -83,7 +92,12 @@ exports.deleteEntry = async (req, res) => {
 exports.updateEntry = async (req, res) => {
     const body = req.body.item
     const id = req.body.id
-    console.log('To Update: ' + body)
+    const {error} = inputValidate.updateValidation(body)
+    if (error) {
+        console.log(error)
+        return res.status(400).json({message: 'Update Entry Validation Error'})
+    }
+    console.log('To Update: ' + body);
     console.log('ID to update: ' + id)
 
     const updated = Entry.findOneAndUpdate({_id: id}, body).catch(e => {

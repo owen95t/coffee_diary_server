@@ -8,6 +8,7 @@ exports.registerValidation = (data) => {
             .lowercase(),
         password: joi.string()
             .min(6)
+            .max(20)
             .required()
     })
     return schema.validate(data)
@@ -21,6 +22,7 @@ exports.loginValidation = (data) => {
             .lowercase(),
         password: joi.string()
             .min(6)
+            .max(20)
             .required()
     })
     return schema.validate(data)
