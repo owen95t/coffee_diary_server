@@ -20,7 +20,7 @@ exports.newEntry = async (req, res) => {
     const {error} = inputValidate.entryValidation(req.body)
     if (error) {
         console.log(error)
-        return res.status(400).json({message: 'New Entry Validation Error!'})
+        return res.status(400).json({message: 'New Entry Error: ' + error})
     }
 
     const newEntry = new Entry(req.body)
@@ -29,7 +29,7 @@ exports.newEntry = async (req, res) => {
         await newEntry.save();
     }catch (e) {
         console.log(e);
-        return res.status(400).json({message: 'Save Error!'})
+        return res.status(400).json({message: 'Save Error!' + e})
     }
     return res.status(201).json({message: 'Save Success! New Entry Created'})
 }
@@ -95,7 +95,7 @@ exports.updateEntry = async (req, res) => {
     const {error} = inputValidate.updateValidation(body)
     if (error) {
         console.log(error)
-        return res.status(400).json({message: 'Update Entry Validation Error'})
+        return res.status(400).json({message: 'Update Entry Error: ' + error})
     }
     console.log('To Update: ' + body);
     console.log('ID to update: ' + id)
