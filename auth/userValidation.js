@@ -1,5 +1,6 @@
 const joi = require('joi');
 
+//TODO: Remove email requirement
 exports.registerValidation = (data) => {
     const schema = joi.object({
         username: joi.string()
@@ -13,7 +14,7 @@ exports.registerValidation = (data) => {
     })
     return schema.validate(data)
 }
-
+//TODO: Remove email requirement
 exports.loginValidation = (data) => {
     const schema = joi.object({
         username: joi.string()

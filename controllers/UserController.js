@@ -123,8 +123,6 @@ exports.checkValidSession = async (req, res) => {
         return res.status(401).json({message: 'Invalid Session', valid: false})
     }
 
-
-
     let decoded;
     try{
         decoded = jwt.verify(token, secret)
@@ -133,7 +131,8 @@ exports.checkValidSession = async (req, res) => {
         console.log('JWT Error')
         return res.status(401).json({message: 'Session Check: JWT Error'})
     }
-    //console.log('Decoded Token: ' + decoded)
+    console.log('Decoded Token: ' + decoded)
+    console.log('Decoded Token._id: ' + decoded._id)
     const user = User.findOne({username: decoded._id})
 
     if (!user) {
